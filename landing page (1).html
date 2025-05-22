@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student & Writer.com - Connect Students with Writers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Header */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 10px 20px;
+        }
+
+        .site-title {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .site-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-right: 15px;
+        }
+
+        .site-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        /* Slider Wrapper */
+        .slider-wrapper {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: white;
+        }
+
+        /* Blog Posts Section */
+        .blog-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #3498db;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .blog-post {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .blog-post.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            padding: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .blog-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .blog-content::-webkit-scrollbar-thumb {
+            background-color: #3498db;
+            border-radius: 5px;
+        }
+
+        .blog-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .blog-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 20px;
+        }
+
+        .footer-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #3498db;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #3498db;
+        }
+
+        .contact-info {
+            margin-top: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .contact-item i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+        }
+
+        .footer-bottom a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px);
+            }
+            60% {
+                transform: translateY(-7px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .site-title {
+                margin-bottom: 10px;
+                justify-content: center;
+            }
+
+            .nav-menu {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-menu a {
+                margin: 5px;
+            }
+
+            .slider-wrapper {
+                height: 300px;
+            }
+
+            .main-content {
+                margin-top: 120px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slider-wrapper {
+                height: 250px;
+            }
+
+            .slide-caption {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+                bottom: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <div class="header-container">
+        <div class="site-title">
+            <h1>Student & Writer.com</h1>
+            <div class="site-icon">S&W</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="support.html"><i class="fas fa-question-circle"></i> Support</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Slider Wrapper -->
+        <div class="slider-wrapper">
+            <div class="slider">
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Students studying">
+                    <div class="slide-caption">Find the perfect writer for your assignments</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Team collaboration">
+                    <div class="slide-caption">Connect with professional writers worldwide</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Freelance work">
+                    <div class="slide-caption">Earn money by helping students with their tasks</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Writing process">
+                    <div class="slide-caption">Quality work delivered on time</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Happy student">
+                    <div class="slide-caption">Join thousands of satisfied students and writers</div>
+                </div>
+            </div>
+            <div class="slider-nav">
+                <div class="slider-dot active" data-index="0"></div>
+                <div class="slider-dot" data-index="1"></div>
+                <div class="slider-dot" data-index="2"></div>
+                <div class="slider-dot" data-index="3"></div>
+                <div class="slider-dot" data-index="4"></div>
+            </div>
+        </div>
+
+        <!-- Blog Posts Section -->
+        <div class="blog-section">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            <div class="blog-grid">
+                <!-- Blog Post 1 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 1" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">How to Choose the Right Writer</h3>
+                        <p class="blog-text">Finding the perfect writer for your assignment can be challenging. In this post, we'll guide you through the process of evaluating writers' profiles, samples, and reviews to ensure you make the best choice for your academic needs.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 2" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Tips for Student-Writer Collaboration</h3>
+                        <p class="blog-text">Effective communication is key to successful collaboration. Learn how to clearly communicate your requirements, provide constructive feedback, and build a productive relationship with your writer.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 3" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Maximizing Earnings as a Freelance Writer</h3>
+                        <p class="blog-text">Discover strategies to increase your income as a freelance writer on our platform. From building a strong profile to specializing in high-demand subjects, we'll show you how to stand out.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 4 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 4" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Academic Integrity: Our Platform's Policy</h3>
+                        <p class="blog-text">Understand how our platform maintains academic integrity while providing valuable learning resources. We explain the difference between collaboration and plagiarism.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 5 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 5" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Writing for Different Academic Levels</h3>
+                        <p class="blog-text">Writers: Learn how to adapt your writing style for high school, undergraduate, and graduate-level assignments. Understand the different expectations at each level.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 6 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 6" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Managing Multiple Assignments</h3>
+                        <p class="blog-text">Students: Tips for effectively managing multiple assignments and deadlines when working with different writers for different subjects.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 7 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 7" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Building a Writer Portfolio</h3>
+                        <p class="blog-text">New to freelance writing? Learn how to create a compelling portfolio that showcases your skills and attracts more students to your profile.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 8 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 8" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Subject Specialization Benefits</h3>
+                        <p class="blog-text">Why specializing in specific subjects can make you a more successful writer on our platform. We explore the advantages of niche expertise.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 9 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 9" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Payment and Pricing Guide</h3>
+                        <p class="blog-text">Everything you need to know about our payment system, pricing structures, and how to set competitive rates as a writer or budget effectively as a student.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 10 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 10" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Quality Assurance Process</h3>
+                        <p class="blog-text">Learn about our rigorous quality assurance process that ensures all work meets academic standards before delivery to students.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 11 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 11" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Writing Technical Papers</h3>
+                        <p class="blog-text">Special tips for writers handling technical assignments in STEM fields, including formatting, terminology, and presentation standards.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 12 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 12" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Citation Styles Explained</h3>
+                        <p class="blog-text">A comprehensive guide to APA, MLA, Chicago, and other citation styles to help both students and writers ensure proper referencing.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 13 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 13" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Time Management for Writers</h3>
+                        <p class="blog-text">How to effectively manage your workload, meet deadlines consistently, and maintain high-quality output as a busy freelance writer.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 14 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 14" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Platform Updates & New Features</h3>
+                        <p class="blog-text">Stay informed about the latest platform improvements, tools, and features designed to enhance your experience as a student or writer.</p>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 15 -->
+                <div class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Blog post 15" class="blog-image">
+                    <div class="blog-content">
+                        <h3 class="blog-title">Success Stories</h3>
+                        <p class="blog-text">Read inspiring stories from students who improved their grades and writers who built successful careers through our platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">About Us</h3>
+                <p>Student & Writer.com connects students with professional writers to help with academic assignments and tasks. Our platform ensures quality, reliability, and academic integrity.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Contact Us</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+254 776 980045</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>support@studentwriter.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Nairobi, Kenya</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Student & Writer.com. All rights reserved. Designed and maintained by <a href="#" target="_blank">@Monsieur_JA</a></p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/254776980045" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Slider Functionality
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        const slideCount = slides.length;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slideCount;
+            updateSlider();
+        }
+
+        // Auto slide change every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Dot navigation
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                currentIndex = parseInt(this.getAttribute('data-index'));
+                updateSlider();
+            });
+        });
+
+        // Blog Post Animation on Scroll
+        const blogPosts = document.querySelectorAll('.blog-post');
+
+        function checkVisibility() {
+            blogPosts.forEach(post => {
+                const postTop = post.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (postTop < windowHeight - 100) {
+                    post.classList.add('visible');
+                }
+            });
+        }
+
+        // Initial check
+        checkVisibility();
+
+        // Check on scroll
+        window.addEventListener('scroll', checkVisibility);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
